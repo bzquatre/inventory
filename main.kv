@@ -15,25 +15,35 @@ ScreenManager:
 <LoginScreen>
     MDBoxLayout:
         orientation: 'vertical'
-        padding: '15dp'
+        padding: '50dp','100dp','50dp','100dp'
+        spacing: '0dp'
         md_bg_color: [1,1,1,1]
-        AsyncImage:
-            source: 'assets/images/logo.png'
-            text: 'Your Image'
-        MDLabel:
-            text:"Log-In"
-            theme_text_color:"Primary"
-            font_size:28
-            bold: True 
+        MDBoxLayout:
+            orientation: 'vertical'
+            padding: '0dp'
+            spacing: '0dp'
+            md_bg_color: [1,1,1,1]
+            MDLabel:
+                text:"Content de te Revoir!"
+                theme_text_color:"Primary"
+                font_size: "26sp"
+                font_style: "H5"
+                bold: True 
+            MDLabel:
+                text:"Entrez Votre Utilisateur et Mot de Passe"
+                theme_text_color:"Secondary"
+                font_size: "14sp"
         MDTextField:
             id: username_input
-            hint_text: "User"
-            required: True
+            font_size: "20sp"
+            hint_text: "Nom d'Utilisateur"
+         
+
         MDRelativeLayout:
             MDTextField:
                 id: password_input
-                hint_text: "Password"
-                password: True
+                font_size: "20sp"
+                hint_text: "Mot de Passe"
                 password: True
                 #icon_left: "key-variant"
                 helper_text_mode: "on_error"
@@ -47,9 +57,15 @@ ScreenManager:
                     password_input.password = False if password_input.password is True else True
 
         MDFillRoundFlatButton:
-            text:"Sign in"
+            text:"Connexion"
+            theme_text_color: "Custom"
+            font_size: "20sp"
+            font_style: "H6" 
+            text_color: 1, 1, 1, 1
+            md_bg_color: 0, 0, 0, 1
             pos_hint: {'center_x': 0.5,'center_y': 0.5}
-            padding: 50, 0, 50, 0 
+            padding: 50, 10, 50, 10 
+            
             on_release: app.login(username_input.text, password_input.text)
             
             width: self.parent.width * 0.8
