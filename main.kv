@@ -11,14 +11,21 @@ ScreenManager:
         MDTopAppBar:
             title: "Inventaire"
             md_bg_color:0, 0, 0, 1
-            right_action_items: [["menu", lambda x:0]]# app.callback(x)]]
-        MDLabel:
-            id:label_api
-            text:""
-            theme_text_color:"Primary"
-            font_size: "26sp"
-            font_style: "H5"
-            bold: True 
+            right_action_items: [["menu", app.logout()]]# app.callback(x)]]
+        MDFloatLayout:
+            ScrollView:
+                pos_hint: {'center_y': .5, 'center_x': .5}
+                size_hint: .9, .8
+
+                MDList:
+                    id: container
+
+            MDFloatingActionButton:
+                icon: 'plus-thick'
+                md_bg_color:0, 0, 0, 1
+                on_release: app.show_task_dialog()
+                elevation_normal: 12
+                pos_hint: {'x': .45 , 'y': .04}
 
 <LoginScreen>
     MDBoxLayout:
@@ -83,3 +90,50 @@ ScreenManager:
             text: ""
             theme_text_color: "Error"
 
+
+
+<DialogContent>:
+    orientation: "vertical"
+    spacing: "30dp"
+    size_hint: 1, None
+    height: "150dp"
+
+
+    MDTextField:
+        id: code_article
+        hint_text: "Code Article..."
+        pos_hint: {"center_y": .4}
+        max_text_length: 50
+        on_text_validate: (app.add_task(code_article, qt_article.text), app.close_dialog())
+    MDTextField:
+        id: qt_article
+        hint_text: "Qt Article..."
+        pos_hint: {"center_y": .4}
+        max_text_length: 50
+        on_text_validate: (app.add_task(code_article, qt_article.text), app.close_dialog())
+
+    BoxLayout:
+        orientation: 'horizontal'
+
+        MDRaisedButton:
+            text: "SAVE"
+            on_release: (app.add_task(code_article, qt_article.text), app.close_dialog())
+        MDFlatButton:
+            text: 'CANCEL'
+            on_release: app.close_dialog()
+            
+<ListItemWithCheckbox>:
+    id: the_list_item
+    markup: True
+
+    LeftCheckbox:
+        id: check
+        on_release:
+            root.mark(check, the_list_item)
+
+    IconRightWidget:
+        icon: 'trash-can-outline'
+        theme_text_color: "Custom"
+        text_color: 1, 0, 0, 1
+        on_release:
+            root.delete_item(the_list_item)
