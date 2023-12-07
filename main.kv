@@ -10,8 +10,16 @@ ScreenManager:
         orientation:'vertical'
         MDTopAppBar:
             title: "Inventaire"
-            md_bg_color:53/255, 2/255, 2/255, 1
+            md_bg_color:0, 0, 0, 1
             right_action_items: [["menu", lambda x:0]]# app.callback(x)]]
+        MDLabel:
+            id:label_api
+            text:""
+            theme_text_color:"Primary"
+            font_size: "26sp"
+            font_style: "H5"
+            bold: True 
+
 <LoginScreen>
     MDBoxLayout:
         orientation: 'vertical'
