@@ -1,0 +1,61 @@
+ScreenManager:
+    LoginScreen:
+        name: "login"
+
+    MainScreen:
+        name:"main"
+        
+<MainScreen> 
+    BoxLayout:
+        orientation:'vertical'
+        MDTopAppBar:
+            title: "Inventaire"
+            md_bg_color:53/255, 2/255, 2/255, 1
+            right_action_items: [["menu", lambda x:0]]# app.callback(x)]]
+<LoginScreen>
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: '15dp'
+        md_bg_color: [1,1,1,1]
+        AsyncImage:
+            source: 'assets/images/logo.png'
+            text: 'Your Image'
+        MDLabel:
+            text:"Log-In"
+            theme_text_color:"Primary"
+            font_size:28
+            bold: True 
+        MDTextField:
+            id: username_input
+            hint_text: "User"
+            required: True
+        MDRelativeLayout:
+            MDTextField:
+                id: password_input
+                hint_text: "Password"
+                password: True
+                password: True
+                #icon_left: "key-variant"
+                helper_text_mode: "on_error"
+            MDIconButton:
+                icon: "eye-off"
+                pos_hint: {"center_y": .5}
+                pos: password_input.width - self.width + dp(8), 0
+                theme_text_color: "Hint"
+                on_release:
+                    self.icon = "eye" if self.icon == "eye-off" else "eye-off"
+                    password_input.password = False if password_input.password is True else True
+
+        MDFillRoundFlatButton:
+            text:"Sign in"
+            pos_hint: {'center_x': 0.5,'center_y': 0.5}
+            padding: 50, 0, 50, 0 
+            on_release: app.login(username_input.text, password_input.text)
+            
+            width: self.parent.width * 0.8
+            size_hint_x: 0.8 
+        MDLabel:
+            id: status_label
+            text: ""
+            theme_text_color: "Error"
+
