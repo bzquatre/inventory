@@ -9,7 +9,7 @@ from kivymd.uix.pickers import MDDatePicker
 from kivymd.uix.list import TwoLineAvatarIconListItem, ILeftBodyTouch
 from kivymd.uix.selectioncontrol import MDCheckbox
 from datetime import datetime
-import json
+import platform,json
 class LoginScreen(Screen):
     def toggle_password_visibility(self, *args):
         password_input = self.ids.password_input
@@ -52,15 +52,26 @@ class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
     '''Custom left container'''
 class MainApp(MDApp):
     task_list_dialog = None
-    def build(self):
-        self.store = JsonStore(self.user_data_dir + '/data.json')
-        try:
-            refreshToken=self.store.get('user')["refresh"]
-            self.user = self.refresh_login(refreshToken)
-        except  Exception as e:
-            print(e)
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        print(self.user_data_dir)
+        if platform.system() == 'Android':
+            # Create a JsonStore in the app's internal storage directory
+            store = JsonStore('internal://data.json')
         else:
-            self.root.current='main'
+            self.store = JsonStore(self.user_data_dir + '/data.json')
+    
+    def build(self):
+        
+        if self.store._data!={}:
+            try:
+                refreshToken=self.store.get('user')["refresh"]
+                self.user = self.refresh_login(refreshToken)
+            except  Exception as e:
+                print(e)
+            else:
+                self.root.current='main'
+
         return super().build()
        
     def refresh_login(self,refresh):
@@ -79,16 +90,15 @@ class MainApp(MDApp):
         UrlRequest(api_url,method="POST",req_body=json.dumps(data), req_headers=headers,
                    on_success=self.on_success, on_failure=self.on_failure, on_error=self.on_error)
     def logout(self):
-        self.store = JsonStore(self.user_data_dir + '/data.json')
+        return
         self.store.clear()
 
     def on_success(self, request, result):
         # Handle the successful API response
-        store = JsonStore('data.json')
         try:
-            store.put('user', username=self.username, refresh=result["refresh"],access=result['access'])
+            self.store.put('user', username=self.username, refresh=result["refresh"],access=result['access'])
         except:
-            store.put('user',access=result['access'])
+            self.store['user']["access"]=result['access']
         self.root.transition.direction = 'left'
         self.root.current = 'main'
 
