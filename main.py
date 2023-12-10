@@ -29,6 +29,7 @@ class DialogContent(MDBoxLayout):
         date_dialog.bind(on_save=self.on_save)
         date_dialog.open()
 
+
     def on_save(self, instance, value, date_range):
         date = value.strftime('%A %d %B %Y')
         self.ids.date_text.text = str(date)
@@ -54,24 +55,13 @@ class MainApp(MDApp):
     task_list_dialog = None
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        print(self.user_data_dir)
-        if platform.system() == 'Android':
-            # Create a JsonStore in the app's internal storage directory
-            self.store = JsonStore('internal://data.json')
-        else:
-            self.store = JsonStore(self.user_data_dir + '/data.json')
-    
+        self.store = JsonStore('data.json')
+                     
     def build(self):
-        
         if self.store._data!={}:
-            try:
                 refreshToken=self.store.get('user')["refresh"]
-                self.user = self.refresh_login(refreshToken)
-            except  Exception as e:
-                print(e)
-            else:
-                self.root.current='main'
-
+                self.user = self.refresh_login(refreshToken)   
+                self.root.current='main'        
         return super().build()
        
     def refresh_login(self,refresh):
