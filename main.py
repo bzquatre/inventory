@@ -57,7 +57,7 @@ class MainApp(MDApp):
         print(self.user_data_dir)
         if platform.system() == 'Android':
             # Create a JsonStore in the app's internal storage directory
-            store = JsonStore('internal://data.json')
+            self.store = JsonStore('internal://data.json')
         else:
             self.store = JsonStore(self.user_data_dir + '/data.json')
     
