@@ -10,6 +10,7 @@ from kivymd.uix.list import TwoLineAvatarIconListItem, ILeftBodyTouch
 from kivymd.uix.selectioncontrol import MDCheckbox
 from datetime import datetime
 import platform,json
+import os
 class LoginScreen(Screen):
     def toggle_password_visibility(self, *args):
         password_input = self.ids.password_input
@@ -55,7 +56,8 @@ class MainApp(MDApp):
     task_list_dialog = None
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.store = JsonStore('data.json')
+        app_path = os.path.dirname(os.path.abspath(__file__))
+        self.store = JsonStore(os.path.join(app_path, 'data.json'))
                      
     def build(self):
         if self.store._data!={}:
