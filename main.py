@@ -53,9 +53,9 @@ class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
 class MainApp(MDApp):
     task_list_dialog = None
     def build(self):
+        self.store = JsonStore(self.user_data_dir + '/data.json')
         try:
-            store = JsonStore('data.json')
-            refreshToken=store.get('user')["refresh"]
+            refreshToken=self.store.get('user')["refresh"]
             self.user = self.refresh_login(refreshToken)
         except  Exception as e:
             print(e)
@@ -79,8 +79,8 @@ class MainApp(MDApp):
         UrlRequest(api_url,method="POST",req_body=json.dumps(data), req_headers=headers,
                    on_success=self.on_success, on_failure=self.on_failure, on_error=self.on_error)
     def logout(self):
-        store = JsonStore('data.json')
-        store.put(None)
+        self.store = JsonStore(self.user_data_dir + '/data.json')
+        self.store.clear()
 
     def on_success(self, request, result):
         # Handle the successful API response
