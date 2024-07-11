@@ -18,8 +18,7 @@ class LoginScreen(Screen):
         password_input.icon_right = "eye" if password_input.password else "eye-off"
 
 
-class MainScreen(Screen):
-    pass
+
 
 class DialogContent(MDBoxLayout):
     """OPENS A DIALOG BOX THAT GETS THE TASK FROM THE USER"""
@@ -54,26 +53,13 @@ class LeftCheckbox(ILeftBodyTouch, MDCheckbox):
     '''Custom left container'''
 class MainApp(MDApp):
     task_list_dialog = None
-    def __init__(self, **kwargs):
-        super().__init__(**kwargs)
-        app_path = os.path.dirname(os.path.abspath(__file__))
-        self.store = JsonStore(os.path.join(app_path, 'data.json'))
-                     
     def build(self):
-        if self.store._data!={}:
-                refreshToken=self.store.get('user')["refresh"]
-                self.user = self.refresh_login(refreshToken)   
-                self.root.current='main'        
+        self.formats=["12*465"]     
         return super().build()
-       
-    def refresh_login(self,refresh):
-        data={
-            "refresh": refresh
-        }
-        headers = {"Content-Type": "application/json"} 
-        api_url = "https://dc.opu.dz/api/token/refresh/"
-        UrlRequest(api_url,method="POST",req_body=json.dumps(data), req_headers=headers,
-                   on_success=self.on_success, on_failure=self.on_failure, on_error=self.on_error)
+                
+
+    
+
     def login(self,username,password):
         self.username=username
         data={"username":username,"password": password}
@@ -81,16 +67,10 @@ class MainApp(MDApp):
         api_url = "https://dc.opu.dz/api/token/"
         UrlRequest(api_url,method="POST",req_body=json.dumps(data), req_headers=headers,
                    on_success=self.on_success, on_failure=self.on_failure, on_error=self.on_error)
-    def logout(self):
-        return
-        self.store.clear()
+
 
     def on_success(self, request, result):
-        # Handle the successful API response
-        try:
-            self.store.put('user', username=self.username, refresh=result["refresh"],access=result['access'])
-        except:
-            self.store['user']["access"]=result['access']
+        self.data=result
         self.root.transition.direction = 'left'
         self.root.current = 'main'
 

@@ -4,25 +4,58 @@ ScreenManager:
 
     MainScreen:
         name:"main"
-        
-<MainScreen> 
+<Format@MDCheckbox>:
+    group: 'format'
+    size_hint: None, None
+    size: dp(48), dp(48)
+<Genre@MDCheckbox>:
+    group: 'genre'
+    size_hint: None, None
+    size: dp(48), dp(48)
+<MainScreen@Screen> 
     BoxLayout:
         orientation:'vertical'
         MDTopAppBar:
-            title: "Inventaire"
+            title: "Book Price"
             md_bg_color:0, 0, 0, 1
-            right_action_items: [["menu", app.logout()]]# app.callback(x)]]
         MDFloatLayout:
-            ScrollView:
-                pos_hint: {'center_y': .5, 'center_x': .5}
-                size_hint: .9, .8
+            MDBoxLayout:
+                orientation: 'vertical'
+                padding: '50dp','100dp','50dp','100dp'
+                spacing: '0dp'
+                md_bg_color: [1,1,1,1]
+                MDBoxLayout:
+                    orientation: 'vertical'
+                    Genre:
+                        active: True
+                        pos_hint: {'center_x': .4, 'center_y': .5}
 
-                MDList:
-                    id: container
+                    Genre:
+                        pos_hint: {'center_x': .6, 'center_y': .5}
+                MDDropDownItem:
+                    id: dropdown_genre
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+                    items: ["Home", "Fame"]
+                    dropdown_bg: [1, 1, 1, 1]
+                    text: "Genre"
+                MDDropDownItem:
+                    id: dropdown_format
+                    pos_hint: {'center_x': 0.5, 'center_y': 0.6}
+                    items: ["Home", "Fame"]
+                    dropdown_bg: [1, 1, 1, 1]
+                    text: "Format"
+                MDTextField:
+                    id: text_pages
+                    hint_text: "noumbre de pages"
+                    mode: "rectangle"
 
-            MDFloatingActionButton:
-                icon: 'plus-thick'
+            MDRectangleFlatIconButton:
+                text: "calculer"
+                theme_text_color: "Custom"
+                text_color: "white"
+                theme_icon_color: "Custom"
                 md_bg_color:0, 0, 0, 1
+                padding: 50, 10, 50, 10 
                 on_release: app.show_task_dialog()
                 elevation_normal: 12
                 pos_hint: {'x': .45 , 'y': .04}
